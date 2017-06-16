@@ -11,7 +11,57 @@
       google.charts.load('current', {'packages':['corechart']});
 
       // Set a callback to run when the Google Visualization API is loaded.
-      google.charts.setOnLoadCallback(drawChart);
+      google.charts.setOnLoadCallback(drawBasic);
+
+      var toppingCounter = {
+         tomato: 6,
+         pepperoni: 7,
+         shrimp: 1,
+         pineapple: 6,
+         peppers: 4
+      }
+
+      window.onload = function() {
+        document.getElementById("pineapple").onclick = vote;
+        document.getElementById("peppers").onclick = vote;
+        document.getElementById("pepperoni").onclick = vote;
+        document.getElementById("shrimp").onclick = vote;
+        document.getElementById("tomato").onclick = vote;
+
+      }
+      function vote() {
+        console.log(this.id);
+        toppingCounter[this.id] = toppingCounter[this.id] + 1;
+        drawBasic();
+      }
+      function drawBasic() {
+
+            // Create the data table.
+            var data = new google.visualization.DataTable();
+            data.addColumn('string', 'Topping');
+            data.addColumn('number', 'People Who Like It');
+            data.addRows([
+              ['Tomato', toppingCounter.tomato],
+              ['Pepperoni', toppingCounter.pepperoni],
+              ['Shrimp', toppingCounter.shrimp],
+              ['Pineapple', toppingCounter.pineapple],
+              ['Peppers', toppingCounter.peppers]
+            ]);
+
+            // Set chart options
+            var options = {'title':'Pizza Topping Popularity',
+                            hAxis: {
+                              title: 'Toppings'
+                            },
+                            vAxis: {
+                              title: 'People Who Like It'
+                            }
+                          };
+
+            // Instantiate and draw our chart, passing in some options.
+            var chart = new google.visualization.ColumnChart(document.getElementById('chart_div'));
+            chart.draw(data, options);
+      }
 
       // Callback that creates and populates a data table,
       // instantiates the pie chart, passes in the data and
@@ -45,5 +95,12 @@
   <body>
     <!--Div that will hold the pie chart-->
     <div id="chart_div"></div>
+
+    <h2>Vote for your favorite topping!</h2>
+    <button id="tomato" type="button" name="tomato">tomato</button>
+    <button id="pepperoni" type="button" name="pepperoni">pepperoni</button>
+    <button id="shrimp" type="button" name="shrimp">shrimp</button>
+    <button id="pineapple" type="button" name="pineapple">pineapple</button>
+    <button id="peppers" type="button" name="peppers">peppers</button>
   </body>
 </html>
